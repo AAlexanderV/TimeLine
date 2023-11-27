@@ -1,0 +1,59 @@
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 10px 5px;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info_panel {
+  width: 100%;
+  min-width: 200px;
+  max-width: 1200px;
+  margin: 10px;
+}
+
+.visits_details {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px;
+
+  font-family: Arial;
+  font-weight: 600;
+  color: #7d7d7d;
+}
+
+/*  */
+.background_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #23d56d3a;
+  border-radius: 30px;
+  padding: 8px 20px;
+}
+
+.visual_data_container {
+  width: 100%;
+  display: grid;
+}
+
+.mark {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.mark::after {
+  content: "";
+  display: block;
+  min-width: 24px;
+  min-height: 24px;
+  border-radius: 50%;
+  background-color: #20c364;
+  margin-right: -12px;
+}
