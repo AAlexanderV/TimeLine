@@ -65,37 +65,76 @@ const options = {
 const monitoredDay = new Date(data[0].from).toLocaleDateString("en-GB", options);
 document.getElementById("date").innerText = monitoredDay;
 
-// form gridColumns positions array
-const gridColumns = [];
+//
+const MS_in24Hours = 24 * 60 * 60 * 1000;
+const atHomeTimefractions = [];
+const walkTimefractions = [];
+const dataContainer = document.getElementById("visual_data_container");
 
-const minsInFullday = 24 * 60;
-const fstDate = new Date(data[0].from);
+for (let i = 0; i < data.length; i++) {
+  let atHomeStart = i > 0 ? new Date(data[i - 1].to) : midNight;
+  let atHomeEnd = new Date(data[i].from);
 
-data.forEach((date) => {
-  const fromDate = new Date(date.from);
-  const minsAfterMidNight = (fromDate - midNight) / 1000 / 60;
+  // пустышка
+  const emptyFraction = Number(((100 / MS_in24Hours) * (atHomeEnd - atHomeStart)).toFixed(2));
+  console.log("emptyFraction: ", emptyFraction);
 
-  const absoluteShiftPercent = Number(((100 / minsInFullday) * minsAfterMidNight).toFixed(2));
+  const emptiness = document.createElement("div");
+  emptiness.classList.add("emptiness");
+  emptiness.style.width = emptyFraction + "%";
+  dataContainer.appendChild(emptiness);
 
-  const shiftCoef = gridColumns.reduce(
-    (acc, currentValue) => Number((acc - currentValue).toFixed(2)),
-    absoluteShiftPercent
-  );
+  // отметка
+  let outsideFrom = new Date(data[i].from);
+  let outsideTo = new Date(data[i].to);
 
-  gridColumns.push(shiftCoef);
-});
+  const outsideFraction = Number(((100 / MS_in24Hours) * (outsideTo - outsideFrom)).toFixed(2));
+  console.log("outsideFraction: ", outsideFraction);
 
-// insert circles into HTML
-const gridContainer = document.getElementById("visual_data_container");
-let gridTemplateColumnsValue = "";
-
-gridColumns.forEach((percent) => {
   const markItem = document.createElement("div");
   markItem.classList.add("mark");
+  markItem.style.width = outsideFraction + "%";
+  const visualItem = document.createElement("div");
+  visualItem.classList.add("visual");
+  markItem.appendChild(visualItem);
+  dataContainer.appendChild(markItem);
+}
 
-  gridContainer.appendChild(markItem);
+//
 
-  gridTemplateColumnsValue += percent + "% ";
-});
+// form gridColumns positions array
+// const gridColumns = [];
 
-gridContainer.style.gridTemplateColumns = gridTemplateColumnsValue;
+// const minsInFullday = 24 * 60;
+// const fstDate = new Date(data[0].from);
+
+// data.forEach((date) => {
+//   const fromDate = new Date(date.from);
+//   const minsAfterMidNight = (fromDate - midNight) / 1000 / 60;
+
+//   const absoluteShiftPercent = Number(((100 / minsInFullday) * minsAfterMidNight).toFixed(2));
+
+//   const shiftCoef = gridColumns.reduce(
+//     (acc, currentValue) => Number((acc - currentValue).toFixed(2)),
+//     absoluteShiftPercent
+//   );
+
+//   gridColumns.push(shiftCoef);
+// });
+
+// // insert circles into HTML
+// const gridContainer = document.getElementById("visual_data_container");
+// let gridTemplateColumnsValue = "";
+
+// gridColumns.forEach((percent) => {
+//   const markItem = document.createElement("div");
+//   markItem.classList.add("mark");
+
+//   gridContainer.appendChild(markItem);
+
+//   gridTemplateColumnsValue += percent + "% ";
+// });
+
+// gridContainer.style.gridTemplateColumns = gridTemplateColumnsValue;
+
+// console.log(gridColumns);
